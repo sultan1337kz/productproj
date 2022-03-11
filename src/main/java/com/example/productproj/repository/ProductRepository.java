@@ -16,9 +16,11 @@ import java.util.UUID;
 public interface ProductRepository extends CrudRepository<Product, UUID> {
 
     @Modifying
-    @Query("update product set quantity = :quantity where id = :id")
+    @Query(value = "update product set quantity = :quantity where id = :id",
+            nativeQuery = true)
     void modifyQuantityById(@Param("id") UUID id, @Param("quantity") long quantity);
 
-    @Query("SELECT id FROM product where id = :id FOR UPDATE")
-    Optional<UUID> selectForUpdate(@Param("paymentId") UUID id);
+    @Query(value = "SELECT * FROM product where id = :id FOR UPDATE ",
+            nativeQuery = true)
+    Optional<Product> selectForUpdate(@Param("id") UUID id);
 }
